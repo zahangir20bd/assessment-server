@@ -29,13 +29,24 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+    // Create Collections
     const dataCollection = client
       .db("assessmentDB")
       .collection("dataCollection");
 
+    // get all data from database
     app.get("/alldata", async (req, res) => {
       const allData = await dataCollection.find().toArray();
       res.send(allData);
+    });
+
+    // Post or Insert Data to Database
+
+    app.post("/alldata", async (req, res) => {
+      const data = req.body;
+      console.log(data);
+      const result = await dataCollection.insertOne(data);
+      res.send(result);
     });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
